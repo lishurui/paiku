@@ -1,0 +1,502 @@
+var Core=window.Core||{};(function(){Core.CONFIG={ActiveClass:"window-current"};Core.ACTIVE={AcDesk:0,GetMain:function(){return $(document.body)}};Core.Html={GetShadow:function(){return"";return'<div class="shadow-cor cor-tl"></div><div class="shadow-cor cor-tr"></div><div class="shadow-cor cor-br"></div><div class="shadow-cor cor-bl"></div><div class="shadow-cor cor-t"></div><div class="shadow-cor cor-r"></div><div class="shadow-cor cor-b"></div><div class="shadow-cor cor-l"></div>'},StopPropagation:function(e){Util.Html.StopPropagation(e)},GetFullIFrame:function(){return""}}})();var Util=window.Util||{};(function(){String.format=function(str){var args=arguments,re=new RegExp("%([1-"+args.length+"])","g");return String(str).replace(re,function($1,$2){return args[$2]})};String.formatmodel=function(str,model){for(var k in model){var re=new RegExp("{"+k+"}","g");str=str.replace(re,model[k])}return str};Util.Html={StopPropagation:function(e){if($.browser.msie){event.cancelBubble=true}else{e.stopPropagation();e.preventDefault()}}};Util.Override=function(b,n,o){var _super={};var _params=[];var _arg=arguments;if(_arg.length>3){for(var i=3,len=_arg.length;i<len;i++){_params.push(_arg[i])}}b.apply(n,_params);for(var k in n){_super[k]=n[k]}for(var k in o){n[k]=o[k]}return _super};Util.Mouse=(function(){var _cache={move:{x:0,y:0,eX:0,eY:0},line:{x:0,y:0,eX:0,eY:0},sq:{t:0,l:0,x:0,y:0,w:0,h:0,st:0}},Return={};var GetLayOutBox=function(){if(!_cache.LayOutBox){_cache.LayOutBox=$('<div style="z-index: 1000000003; display: none;background: none repeat scroll 0 0 black;height: 100%;left: 0;position: absolute;top: 0;width: 100%;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;"><div style="height:100%;width:100%;"></div></div>');$(document.body).append(_cache.LayOutBox)}if($.browser.msie&&$.browser.version==6){var doc=document.documentElement;_cache.LayOutBox.css({height:((doc.scrollHeight>doc.clientHeight)?doc.scrollHeight:doc.clientHeight)+"px"})}else{_cache.LayOutBox.css({position:"fixed"})}return _cache.LayOutBox};Return.GetLayOutBox=GetLayOutBox;var moveBoxFun=function(e){if(_cache.move.state){_cache.move.eX=e.screenX;_cache.move.eY=e.screenY;var lessX=_cache.move.eX-_cache.move.x;var lessY=_cache.move.eY-_cache.move.y;if(_cache.move.box){var t=_cache.move.sT+lessY;var l=_cache.move.sL+lessX;if(t>_cache.move.maxT){if(_cache.move.maxT!==false){t=_cache.move.maxT}}else{if(t<_cache.move.minT){if(_cache.move.minT!==false){t=_cache.move.minT}}}if(l>_cache.move.maxL){if(_cache.move.maxL!==false){l=_cache.move.maxL}}else{if(l<_cache.move.minL){if(_cache.move.minL!==false){l=_cache.move.minL}}}_cache.move.box.css({left:l+"px",top:t+"px"})}if(e.data.move_callback){e.data.move_callback()}return false}};Return.MoveBox=function(obj){var outer=obj.Outer;var box=obj.Box;obj.ClickBox.attr("ws_property","1");obj.ClickBox.bind("mousedown",{box:box,outer:outer,callback:obj.Callback,move_callback:obj.MoveCallback},function(e){if($(this).attr("stop_move")){return}_cache.MoveLayOut=GetLayOutBox();_cache.MoveLayOut.css({cursor:"default"});var lay=($.browser.msie)?_cache.MoveLayOut:$(window);lay.unbind("mousemove").bind("mousemove",{move_callback:e.data.move_callback},function(e){if(_cache.move.state){_cache.MoveLayOut.show()}moveBoxFun(e);return false});lay.unbind("mouseup").bind("mouseup",function(e){if(_cache.move.state){_cache.move.state=false;_cache.MoveLayOut.hide();_cache.MoveLayOut.css({cursor:"default"});if($.browser.msie){_cache.MoveLayOut[0].releaseCapture()}}});if($.browser.msie){_cache.MoveLayOut[0].setCapture()}_cache.move.state=true;_cache.move.box=e.data.box;_cache.move.outer=e.data.outer;_cache.move.x=e.screenX;_cache.move.y=e.screenY;_cache.move.eX=e.screenX;_cache.move.eY=e.screenY;var of=_cache.move.box.offset();_cache.move.box.css({left:0,top:0}).offset(of);_cache.move.sT=_cache.move.box.css("top")?parseInt(_cache.move.box.css("top")):_cache.move.box.offset().top;_cache.move.sL=_cache.move.box.css("left")?parseInt(_cache.move.box.css("left")):_cache.move.box.offset().left;if(obj.IsAddScrollTop){_cache.move.sT=_cache.move.sT-$(window).scrollTop()}if(_cache.move.outer){var oh=_cache.move.outer.height(),ow=_cache.move.outer.width(),bh=_cache.move.box.height(),bw=_cache.move.box.width();_cache.move.minT=_cache.move.outer.offset().top;_cache.move.maxT=_cache.move.outer.offset().top+_cache.move.outer.height()-_cache.move.box.height();_cache.move.minL=_cache.move.outer.offset().left;_cache.move.maxL=_cache.move.outer.offset().left+_cache.move.outer.width()-_cache.move.box.width()}else{_cache.move.minT=false;_cache.move.maxT=false;_cache.move.minL=false;_cache.move.maxL=false}if(obj.MoveSetting){for(var k in obj.MoveSetting){_cache.move[k]=obj.MoveSetting[k]}}if(e.data.callback){e.data.callback()}return false});return{Disable:function(){obj.ClickBox.attr("stop_move","1")},Enable:function(){obj.ClickBox.removeAttr("stop_move")},ChangeSetting:function(moveSetting){if(moveSetting){if(!obj.MoveSetting){obj.MoveSetting={}}for(var k in moveSetting){obj.MoveSetting[k]=moveSetting[k]}}}}};Return.MoveLine=function(line,type,callback,mousedown){line.css({cursor:type});line.bind("mousedown",{type:type,callback:callback,down:mousedown},function(e){_cache.MoveLayOut=GetLayOutBox();_cache.MoveLayOut.css({cursor:e.data.type});var lay=($.browser.msie)?_cache.MoveLayOut:$(window);lay.unbind("mousemove").bind("mousemove",{callback:e.data.callback},function(e){if(_cache.line.state){_cache.line.eX=e.screenX;_cache.line.eY=e.screenY;if(e.data.callback){e.data.callback(_cache.line)}return true}}).unbind("mouseup").bind("mouseup",function(e){if(_cache.line.state){_cache.line.state=false;_cache.MoveLayOut.hide();if($.browser.msie){_cache.MoveLayOut[0].releaseCapture()}_cache.MoveLayOut.css({cursor:"default"});return false}});_cache.MoveLayOut.show();if($.browser.msie){_cache.MoveLayOut[0].setCapture()}_cache.line.state=true;_cache.line.x=e.screenX;_cache.line.eX=e.screenX;_cache.line.y=e.screenY;_cache.line.eY=e.screenY;if(e.data.down){e.data.down()}return false})};var sqEvent={move:function(e){if(_cache.sq.movestate){var eX=e.screenX,eY=e.screenY;var lessX=eX-_cache.sq.sX,lessY=eY-_cache.sq.sY;var w=Math.abs(lessX);var h=Math.abs(lessY);var t=lessY?_cache.sq.sT:_cache.sq.sT+lessY,l=lessX?_cache.sq.sL:_cache.sq.sL+lessX;var oH=_cache.sq.outer.height()-2;var oW=_cache.sq.dom.width()-2;var scrollTop=_cache.sq.outer.scrollTop();var scrollLeft=_cache.sq.outer.scrollLeft();if(lessY<0){t=t-h}if(lessX<0){l=l-w}if(t<0){h+=t;t=0}else{if(t>0&&(t-scrollTop+h)>oH){h=oH-t+scrollTop}}if(l<0){w+=l;l=0}else{if(l>0&&(l-scrollLeft+w)>oW){w=oW-l+scrollLeft}}_cache.sq.box.height(h).css({width:w+"px",left:l+"px",top:t+"px"});if(_cache.events.mousemove){var l=_cache.sq.box.offset().left,t=_cache.sq.box.offset().top,w=_cache.sq.box.width(),h=_cache.sq.box.height();_cache.events.mousemove(l,t,l+w,t+h,e.ctrlKey,e)}if(_cache.sq.box.is(":hidden")&&w&&h){_cache.sq.box.show()}return true}},up:function(e){if(_cache.sq.movestate){_cache.sq.box.show();if(_cache.events.mouseup){var l=_cache.sq.box.offset().left,t=_cache.sq.box.offset().top,w=_cache.sq.box.width(),h=_cache.sq.box.height();_cache.events.mouseup(l,t,l+w,t+h,e.ctrlKey,e)}_cache.sq.box.hide();_cache.sq.movestate=false;_cache.sq.x=_cache.sq.y=_cache.sq.w=_cache.sq.h=_cache.sq.t=_cache.sq.l=_cache.sq.st=0;return true}}};Return.Square=function(dom,outer,events){dom.bind("mousedown",{outer:outer},function(e){if($(e.target).attr("menu")){return true}var box=$(this);var lay=($.browser.msie)?$(document):$(window);lay.unbind("mousemove").bind("mousemove",sqEvent.move).unbind("mouseup").bind("mouseup",sqEvent.up);if(!_cache.sq.box){_cache.sq.box=$('<div style="position:absolute; display:none; top:0; left:0; border:1px solid '+Util.CONFIG.SQBrdColor+"; background:"+Util.CONFIG.SQBgColor+"; filter:Alpha(Opacity="+Util.CONFIG.SQOpacity+"); opacity:0."+Util.CONFIG.SQOpacity+'; overflow:hidden; display:none; z-index:99999;"></div>');box.parent().append(_cache.sq.box)}_cache.sq.movestate=true;_cache.sq.outer=e.data.outer;var scrollTop=_cache.sq.outer.scrollTop();var scrollLeft=_cache.sq.outer.scrollLeft();_cache.sq.sX=e.screenX;_cache.sq.sY=e.screenY;_cache.sq.w=0;_cache.sq.h=0;_cache.sq.sT=e.clientY-_cache.sq.outer.offset().top+scrollTop;_cache.sq.sL=e.clientX-_cache.sq.outer.offset().left+scrollLeft;_cache.sq.dom=box;_cache.events=!events?{}:events;var defaultLen=(!$.browser.msie)?0:1;if(box.css("position")=="absolute"||box.css("position")=="relative"){_cache.sq.box.width(defaultLen).height(defaultLen).css({top:_cache.sq.sT+"px",left:_cache.sq.sL+"px"})}else{_cache.sq.box.width(defaultLen).height(defaultLen).css({top:(_cache.sq.sT-scrollTop)+"px",left:_cache.sq.sL+"px"})}_cache.sq.box.show();if(_cache.events.mousedown){var l=_cache.sq.box.offset().left,t=_cache.sq.box.offset().top,w=_cache.sq.box.width(),h=_cache.sq.box.height();_cache.events.mousedown(l,t,l+w,t+h,e.ctrlKey,e)}_cache.sq.box.hide();return true});try{if(parent){$(parent.document).bind("mousemove",sqEvent.move).bind("mouseup",sqEvent.up)}}catch(e){}return{Disable:function(){if(_cache.sq.movestate){_cache.sq.movestate=false;_cache.sq.box.hide();_cache.sq.x=_cache.sq.y=_cache.sq.w=_cache.sq.h=_cache.sq.t=_cache.sq.l=_cache.sq.st=0;if($.browser.msie){_cache.MoveLayOut&&_cache.MoveLayOut[0].releaseCapture()}_cache.MoveLayOut&&_cache.MoveLayOut.hide();return false}}}};return Return})();Util.Layer=(function(){var _cache={},Return={};Return.Min=function(box,mBox,callback){if(!_cache.MinBorder){_cache.Minborder=$('<div style="z-index:10000000;background: none repeat scroll 0 0 #fff;filter:alpha(opacity=30);-moz-opacity:0.3;opacity:0.3;border:1px soild #ccc;position:absolute;top:0;left0;display:none;"></div>');$(document.body).append(_cache.Minborder)}var w=box.width(),h=box.height(),t=box.offset().top,l=box.offset().left,eT=mBox.offset().top,eL=mBox.offset().left,eW=mBox.width(),eH=mBox.height();_cache.Minborder.width(w).height(h).css({left:l,top:t}).show();_cache.Minborder.animate({width:eW,height:eH,top:eT,left:eL},300,function(){_cache.Minborder.hide()});if(callback){callback()}};Return.Center=function(box,setting){var mainBox;var cut=0,t=0,l=0;if(setting){if(setting.Main){mainBox=setting.Main;t=mainBox.offset().top;l=mainBox.offset().left;if(setting&&setting.NoAddScrollTop){t-=$(window).scrollTop()}}else{mainBox=$(window)}if(setting.Cut!=undefined){cut=setting.Cut}}else{mainBox=$(window)}var cssT=(mainBox.height()-box.height())/3+cut+t;var cssL=(mainBox.width()-box.width())/2+cut+l;if(cssT<0){cssT=0}if(cssL<0){cssL=0}var st=0;if(!setting||!setting.NoAddScrollTop){st=mainBox.scrollTop()}if(st){cssT+=st}box.css({top:cssT,left:cssL})};return Return})()})();(function(){Core.DialogBase=function(settings){var _temp='<div class="dialog-box" style="display:none;z-index:1000000002">'+Core.Html.GetShadow()+'<h2 class="dialog-title" rel="title_box"><span rel="base_title"></span><div class="dialog-handle"><a href="javascript:;" class="diag-close" btn="close">关闭</a></div></h2><div rel="base_content"></div></div>';var _box,_cover,_timer,_self=this;var _settings=!settings?{}:settings;this.Main=Core.ACTIVE.GetMain();var create=function(win){if(!_self.warp){_self.warp=$(settings.warpHtml||_temp);if(_settings.width){_self.warp.width(_settings.width)}$(document.body).append(_self.warp);_self.warp.find("[btn]").mousedown(function(e){Core.Html.StopPropagation(e);return true});_self.warp.find("[btn]").click(function(e){switch($(this).attr("btn")){case"close":_self.Close();break}return false});if(_settings.title){_self.warp.find("[rel='base_title']").html(_settings.title)}if(_settings.content){_self.warp.find("[rel='base_content']").append(_settings.content)}if(!Core.CONFIG.DialogNotMove){var mset={ClickBox:_self.warp.find("[rel='title_box']"),Box:_self.warp,Outer:_self.Main};Util.Mouse.MoveBox(mset)}if(_self.Initial){_self.Initial()}if($.browser.msie&&$.browser.version==6){}else{_self.warp.css({position:"fixed"})}}if(!_cover){_cover=$('<div style="z-index: 1000000001; display: none;background: none repeat scroll 0 0 #fff;_padding-top:40px;height: 100%;left: 0;position: absolute;top: 0;width: 100%;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;"><div style="height:100%;width:100%;"></div></div>');$(document.body).append(_cover);if($.browser.msie&&$.browser.version==6){var doc=document.documentElement;_cover.css({width:((doc.scrollWidth>doc.clientWidth)?doc.scrollWidth:doc.clientWidth)+"px",height:((doc.scrollHeight>doc.clientHeight)?doc.scrollHeight:doc.clientHeight)+"px"})}else{_cover.css({position:"fixed"})}_cover.bind("mousedown",function(){if(_timer){window.clearInterval(_timer)}_timer=window.setInterval(function(){if(_timer_index%2){_self.warp&&_self.warp.addClass(Core.CONFIG.ActiveClass)}else{_self.warp&&_self.warp.removeClass(Core.CONFIG.ActiveClass)}_timer_index++;if(_timer_index>(Core.CONFIG.TwinkCount*2+1)){_timer_index=1;if(_timer){window.clearInterval(_timer)}}},Core.CONFIG.TwinkTime)});$(document).on("keydown",function(e){if(e.keyCode==27){if(_cover){_self.Close();return false}}})}Util.Layer.Center(_self.warp,{Main:false,NoAddScrollTop:true});if($.browser.msie&&$.browser.version==6){_self.warp.css({top:$(window).scrollTop()+($(window).height()-_self.warp.height())/3})}};var _timer_index=1;this.Open=function(calback,win){create(win);if(calback){calback()}_cover.show();_self.warp.addClass(Core.CONFIG.ActiveClass).show();_self.warp.find('[btn="close"]').focus().blur();if(!Core.DialogBase.History){Core.DialogBase.History=0}Core.DialogBase.History++};this.Close=function(){_cover&&_cover.hide().remove();_self.warp&&_self.warp.hide().remove();_cover=false;_self.warp=false;if(Core.DialogBase.History){Core.DialogBase.History--}if(Core.DialogBase.History<0){Core.DialogBase.History=0}}}})();(function(){var mod=function(actions){var _content=$('<iframe style="width:100%; background:#fff;" frameborder=0 src=""></iframe>'),_self=this;var _top=Util.Override(Core.DialogBase,_self,{Initial:function(){if($.browser.mozilla){_content.on("load",function(){try{var win=$(this.contentWindow);$(win).on("keydown",function(e){if(e.keyCode==27){return false}})}catch(e){}})}},GetIframe:function(){return _content[0]},Show:function(url){_top.Open(function(){_content.off("load").on("load",function(){if(actions&&actions.ready){var ifr=this;window.setTimeout(function(){actions.ready(ifr.contentWindow)},10)}})});_content.attr("src",url)},Reset:function(width,height,notcenter){if(width){_self.warp.width(width)}if(height){_content.height(height)}if(!notcenter){Util.Layer.Center(_self.warp,{Main:false,NoAddScrollTop:true})}},Close:function(doHide){actions&&actions.close&&actions.close(doHide);window.setTimeout(function(){_content.attr("src","");_top.Close()},10)},ResetTitle:function(title){_self.warp.find('[rel="base_title"]').html(title)}},{content:_content,title:"新窗口",warpHtml:actions.warpHtml})};Core.SimpleFrameDG=(function(){var _cache={},_ready=false,_ackey;return{Open:function(key,url,setting){if(!setting){setting={}}if(!setting.width){setting.width=320}_ready=false;if(setting){_ready=setting.ready}if(!_cache[key]){_cache[key]=new mod({ready:function(win){_ready&&_ready(win)},warpHtml:setting.warpHtml})}_cache[key].Show(url);_ackey=key;if(setting){_cache[key].Reset(setting.width,setting.height);_cache[key].ResetTitle(setting.title?setting.title:"新窗口")}return _cache[key]},Close:function(key,data){if(!key){key=_ackey}if(_cache[key]){_cache[key].Close(data)}},Reset:function(key,setting){if(_cache[key]){_cache[key].Reset(setting.width,setting.height,setting.notcenter)}}}})();Core.FrameDG=(function(){var _mod,_doHandler,_hideBack=false,_hideBackData,_ready;return{IsOpen:function(){if(_mod){return _mod.warp.length}return false},GetIframe:function(){if(_mod){return _mod.GetIframe()}else{return false}},Reset:function(width,height,notcenter){if(_mod){_mod.Reset(width,height,notcenter)}},ResetTitle:function(title){if(_mod){_mod.ResetTitle(title)}},Open:function(url,setting){if(setting.callback){_doHandler=setting.callback}else{_doHandler=false}if(setting.ready){_ready=setting.ready}else{_ready=false}if(!_mod){_mod=new mod({ready:function(win){_ready&&_ready(win)},close:function(doHide){if(!doHide){if(_hideBack){_doHandler&&_doHandler(_hideBackData)}}}})}_hideBackData=null;_hideBackData=setting.hide_data;_hideBack=setting.is_hide_back;_mod.Show(url);if(setting){_mod.Reset(setting.width,setting.height);_mod.ResetTitle(setting.title?setting.title:"新窗口")}return _mod},Close:function(data){if(_mod){if(_doHandler){_doHandler(data)}_mod.Close(true)}},Hide:function(){if(_mod){_mod.Close()}}}})()})();Core.OnlyFrame=(function(){var _cache={},_defautWidth=960;var disInstance=function(){if(_cache.iframe){_cache.iframe.attr("src","");_cache.iframe.empty().remove();_cache.iframe=false}if(_cache.box){_cache.box.empty().remove();_cache.box=false}_cache.resizeCallback=false;if(_cache.closeCallback){_cache.closeCallback(_cache.hideBackData);_cache.closeCallback=false}};var init=function(){if(!_cache.box){_cache.box=$('<div class="popup-window-wrap" is_over="1"><div class="popup-window"><iframe src="" frameborder=0></iframe><div class="popup-window-handle"><a href="javascript:;" class="close" btn="close">关闭</a></div></div></div>');$(document.body).append(_cache.box);_cache.iframe=_cache.box.find("iframe");if($.browser.mozilla){_cache.iframe.on("load",function(){try{var win=$(this.contentWindow);$(win).on("keydown",function(e){if(e.keyCode==27){return false}})}catch(e){alert(e)}})}_cache.box.on("mouseenter",function(){_cache.box.attr("is_over","1")}).on("mouseleave",function(){_cache.box.attr("is_over","0")});_cache.box.find("[btn='close']").on("click",function(){disInstance();return false})}if(!_cache.bind_reset){_cache.bind_reset=true;$(window).on("resize",function(){if(_cache.resizeCallback){_cache.resizeCallback($(document).width(),$(document).height())}});$(document).on("keydown",function(e){if(e.keyCode==27){if(_cache.box&&_cache.box.attr("is_over")=="1"){disInstance();return false}}})}};var _openTimer;return{Resize:function(width,height){if(_cache.box){var l=0;if(width){l=-width/2}_cache.box.find(".popup-window").width(width).css("margin-left",l+"px")}},Open:function(url,setting){if(_openTimer){window.clearTimeout(_openTimer)}init();if(!setting){setting={}}if(!setting.width){setting.width=960}if(!setting.height){setting.height=500}if(setting.resizeCallback){_cache.resizeCallback=setting.resizeCallback}else{_cache.resizeCallback=false}_cache.hideBackData=null;_cache.hideBackData=setting.hide_data;if(setting.hideCallback){_cache.closeCallback=setting.hideCallback}else{_cache.closeCallback=false}_cache.iframe.attr("src",url);_cache.box.find(".popup-window").width(setting.width).css("margin-left",(-setting.width/2)+"px");_openTimer=window.setTimeout(function(){try{_cache.box&&_cache.box.show()}catch(e){}},20)},Close:function(data){if(data!=undefined){_cache.hideBackData=data}disInstance()}}})();Core.TabFrame=(function(){var _tabList,_mod;var mod=function(){var _content=$('<iframe style="width:100%; height: 510px; background:#fff;" frameborder=0 src=""></iframe>'),_self=this,_titleTab;var focusLi=function(type){_titleTab.find(".focus").removeClass("focus");var el=_titleTab.find("li")[type];if(el){$(el).addClass("focus")}};var _top=Util.Override(Core.DialogBase,_self,{Initial:function(){var html=[];html.push('<ul class="dialog-tab">');for(var i=0,len=_tabList.length;i<len;i++){var item=_tabList[i];html.push('<li key="'+i+'"><spam>'+item.text+"</span></li>")}html.push("</ul>");_titleTab=$(html.join(""));_titleTab.find("li").on("click",function(){var el=$(this);var ind=Number(el.attr("key"));_content.attr("src",_tabList[ind].url);focusLi(ind);return false});var title=_self.warp.find('[rel="base_title"]');title.before(_titleTab);title.hide()},Show:function(type){_top.Open(function(){_content.off("load").on("load",function(){var ifr=this;window.setTimeout(function(){$(ifr.contentWindow.document).on("keydown",function(e){if(e.keyCode==27){_self.Close()}})},100)});focusLi(type)});_content.attr("src",_tabList[type].url)},Close:function(){window.setTimeout(function(){_content.attr("src","");_top.Close()},10)}},{content:_content,title:"",width:700})};return{Open:function(list,opt){_tabList=list;if(!_tabList){return}if(!_mod){_mod=new mod()}if(!opt){opt={}}if(opt.type==undefined){opt.type=0}_mod.Show(opt.type)},Close:function(){if(_mod){_mod.Close()}}}})();Core.LineTabFrame=(function(){var _tabList,_mod,_title;var mod=function(){var _self=this,_titleTab,_iframe;var _content=$('<div class="dg-sub-tab"></div><div class="dg-sub-frame"><iframe src="setting_common.html" frameborder="0"></iframe></div>');var focusLi=function(type){_titleTab.find(".focus").removeClass("focus");var el=_titleTab.find("li")[type];if(el){$(el).find("a").addClass("focus")}};var _top=Util.Override(Core.DialogBase,_self,{Initial:function(){_self.warp.height(500);_iframe=_self.warp.find("iframe");var html=[];html.push("<ul>");for(var i=0,len=_tabList.length;i<len;i++){var item=_tabList[i];html.push('<li key="'+i+'"><a href="javascript:;">'+item.text+"</a></li>")}html.push("</ul>");_titleTab=$(html.join(""));_titleTab.find("li").on("click",function(){var el=$(this);var ind=Number(el.attr("key"));_iframe.attr("src",_tabList[ind].url);focusLi(ind);return false});var tabBox=_self.warp.find(".dg-sub-tab");tabBox.html("").append(_titleTab)},Show:function(type){_top.Open(function(){_iframe.off("load").on("load",function(){var ifr=this;window.setTimeout(function(){$(ifr.contentWindow.document).on("keydown",function(e){if(e.keyCode==27){_self.Close()}})},100)});focusLi(type)});_iframe.attr("src",_tabList[type].url)},Close:function(){window.setTimeout(function(){_iframe&&_iframe.attr("src","");_top.Close()},10)}},{content:_content,title:_title,width:700,height:500})};return{Open:function(list,opt){_title=opt.title?opt.title:"";_tabList=list;if(!_tabList){return}if(!_mod){_mod=new mod()}if(!opt){opt={}}if(opt.type==undefined){opt.type=0}_mod.Show(opt.type);_mod.warp.find('[rel="base_title"]').html(_title)},Close:function(){if(_mod){_mod.Close()}}}})();Core.Frame=function(url,obj){var _self=this;if(!obj){obj={}}if(!obj.title){obj.title="新窗口"}var _content=$('<div class="window-frame"><iframe src="" frameborder="0" rel="content"></iframe>'+(obj.is_has_flash?'<div class="app-back" rel="flash_op" style="display:none;"></div>':"")+"</div>");var _opcBoxTemp='<div style="z-index: 9000000;background: none repeat scroll 0 0 black;height: 100%;left: 0;position: absolute;top: 0;width: 100%;filter:alpha(opacity=0.15);-moz-opacity:0;opacity:0;"></div>';var _opcBox;obj.content=_content;Core.WindowBase.call(this,obj);var parentClose=_self.Close;var parentOpen=_self.Open;var parentHide=_self.Hide;var parentActive=_self.Active;var parentDeActive=_self.DeActive;var _isClose=true;this.FrameSetting=obj;this.IsHide=false;if(this.FrameSetting.is_has_flash!=undefined&&typeof this.FrameSetting.is_has_flash=="string"){this.FrameSetting.is_has_flash=Number(this.FrameSetting.is_has_flash)}this.Initial=function(){_self.warp.addClass("window-box")};this.Open=function(newUrl){parentOpen();if(_isClose){_content.find("[rel='content']").attr("src",newUrl?newUrl:url);_isClose=false}else{if(newUrl){_content.find("[rel='content']").attr("src",newUrl)}}_self.IsHide=false};this.Hide=function(){parentHide();_self.IsHide=true};this.Close=function(){parentClose();_content.find("[rel='content']").attr("src","");if(_opcBox){_opcBox.remove();_opcBox=false}_content.find("iframe").attr("src","");_content.html("");_self.warp&&_self.warp.remove();_self.warp=false;_isClose=true;_self.IsHide=false};this.Active=function(zIndex){if(_opcBox){_opcBox.hide()}parentActive(zIndex);if(_self.FrameSetting.is_has_flash){_content.find("[rel='content']").css({height:"",width:""});_content.find("[rel='flash_op']").hide()}};this.DeActive=function(zIndex){if(!_opcBox){_opcBox=$(_opcBoxTemp);_content.find("[rel='content']").before(_opcBox)}_opcBox.show();parentDeActive(zIndex);if(_self.FrameSetting.is_has_flash){_content.find("[rel='content']").css({height:"1px",width:"1px"});_content.find("[rel='flash_op']").show()}}};(function(){Core.Message=(function(){var _dialog;var _MessageModel=function(){var _self=this,_initState=false,_callback,_openStatus=false,_dialog_type;var _content=$('<div><div class="dialog-msg" rel="content"></div><div class="dialog-bottom"><div class="con"><a href="javascript:;" class="button" btn="confirm">确定</a><a href="javascript:;" class="btn-link" btn="cancel" style="display:none;">取消</a></div></div><div>');Core.DialogBase.call(this,{content:_content,title:"信息提示"});var setTitle=function(title){title&&_self.warp.find("[rel='base_title']").html(title)};this.Initial=function(){if(!_initState){$(document).bind("keyup",function(e){if(_openStatus){if(e.keyCode==13){_content.find("[btn='confirm']").click()}else{if(e.keyCode==27){switch(_dialog_type){case 0:_content.find("[btn='confirm']").click();break;case 1:_content.find("[btn='cancel']").click();break}}}}})}};var _closeFun=this.Close;this.Close=function(){_closeFun();_openStatus=false};this.Show=function(obj){_callback=false;_self.Open(function(){var cancelBtn=_content.find("[btn='cancel']");var confirmBtn=_content.find("[btn='confirm']");if(obj.confirm_link){confirmBtn.unbind("click").bind("click",function(){if(_callback){_callback(true)}_self.Close();return true});confirmBtn.attr("href",obj.confirm_link).attr("target","_blank");cancelBtn.unbind("click").bind("click",function(){var r=true;if(_callback){r=_callback(false)}if(r===false){return false}_self.Close();return false})}else{if(confirmBtn.attr("target")){confirmBtn.removeAttr("target");confirmBtn.attr("href","javascript:;")}_self.warp.find("[btn]").unbind("click").bind("click",function(){var r=true;if(_callback){r=_callback($(this).attr("btn")=="confirm")}if(r===false){return false}_self.Close();return false})}if(obj.confirm_text){confirmBtn.html(obj.confirm_text)}else{confirmBtn.html("确定")}if(obj.cancel_text){cancelBtn.html(obj.cancel_text)}else{cancelBtn.html("取消")}_callback=obj.callback;setTitle(obj.title);if(obj.dialog_type==undefined){obj.dialog_type=0}if(!obj.type){obj.type="war"}var html_temp='<h3><i class="hint-icon hint-{type}"></i>{text}</h3>'+(obj.content?'<div class="dialog-msg-text">{content}</div>':"");var con=_content.find("[rel='content']");con.html(String.formatmodel(html_temp,obj));confirmBtn.removeClass("btn-orange");switch(obj.dialog_type){case 0:cancelBtn.hide();break;case 1:cancelBtn.show();break}_dialog_type=obj.dialog_type;_openStatus=true},obj.win)}};var init=function(){if(!_dialog){_dialog=new _MessageModel()}};var _alertTimer;return{Confirm:function(obj){init();obj.dialog_type=1;_dialog.Show(obj)},Alert:function(obj){init();obj.dialog_type=0;_dialog.Show(obj);if(obj.timeout){_alertTimer=window.setTimeout(function(){Core.Message.Hide()},obj.timeout)}},Hide:function(){if(_alertTimer){window.clearTimeout(_alertTimer)}if(_dialog){_dialog.Close()}}}})()})();(function(){Core.MinMessage=(function(){var _temp='<div class="popup-hint" style="z-index:9999999999;"><i class="" rel="type"></i><em class="sl"><b></b></em><span rel="con"></span><em class="sr"><b></b></em></div>';var _cache={Type:{suc:"hint-icon hint-suc-m",war:"hint-icon hint-war-m",err:"hint-icon hint-err-m",load:"hint-loader",inf:"hint-icon hint-inf-m"}},_dom,_timer;var _obj;var create=function(text,type){if(!_dom){_dom=$(String.format(_temp,text));$(document.body).append(_dom);if($.browser.msie&&$.browser.version==6){}else{_dom.css({position:"fixed"})}}_dom.find("[rel='con']").html(text);var icon=_dom.find("[rel='type']");for(var k in _cache.Type){icon.removeClass(_cache.Type[k])}icon.addClass(_cache.Type[type])};var hide=function(){if(_timer){window.clearTimeout(_timer)}if(_dom){_dom.hide();_obj.callback&&_obj.callback()}};return{Show:function(obj){_obj=obj;if(!obj.type){obj.type="war"}create(obj.text,obj.type);Util.Layer.Center(_dom,{NoAddScrollTop:!($.browser.msie&&$.browser.version==6)});_dom.show();if(_timer){window.clearTimeout(_timer)}if(obj.timeout){_timer=window.setTimeout(hide,obj.timeout)}},Hide:function(){hide()}}})()})();window['UtilLin'] = {};
+
+/**蚂蚁所需*/
+//格式化数字
+function number_format(arg,len){
+	var arrNum = arg.toString().split('.');
+	//获取整数部分
+	var integer = parseInt(arrNum[0]).toString();
+	//不足补0
+	var rep = '';
+	for(i=0;i<len;i++){
+		rep = rep+'0';
+	}
+	//计算小数
+	var decimals = '';
+	if(arrNum.length>=2){
+		decimals = arrNum[1].toString() + rep;
+	}else{
+		decimals = rep;
+	}
+	decimals = decimals.substr(0,len);
+	var result = integer+'.'+decimals;
+	return result;
+}
+
+function emptyValidata(errObj){
+	UtilLin.uiCommon.valiShow(errObj,errObj.attr('errormsg'));
+}
+
+function right(str,len){
+    var strlength = str.length;
+    return str.substr(strlength-len,strlength);
+}
+
+function getJsonLength(jsonData){
+	var jsonLength = 0;
+	for(var item in jsonData){
+		jsonLength++;
+	}
+	return jsonLength;
+}
+
+function openNewPage(owurl){
+	var tmp=window.open("about:blank","","fullscreen=1")
+	tmp.moveTo(0,0);
+	tmp.resizeTo(screen.width+20,screen.height);
+	tmp.focus();
+	tmp.location=owurl;
+}
+/**蚂蚁所需*/
+
+
+var _reg = {
+        intege:"^-?[1-9]\\d*$",					//整数
+        intege1:"^[1-9]\\d*$",					//正整数
+        intege2:"^-[1-9]\\d*$",					//负整数
+        num:"^([+-]?)\\d*\\.?\\d+$",			//数字
+        num1:"^[1-9]\\d*|0$",					//正数（正整数 + 0）
+        num2:"^-[1-9]\\d*|0$",					//负数（负整数 + 0）
+        decmal:"^([+-]?)\\d*\\.\\d+$",			//浮点数
+        decmal1:/^[0-9]*.?\d*$/,                //正浮点数
+        decmal2:"^-([1-9]\\d*.\\d*|0.\\d*[1-9]\\d*)$", //负浮点数
+        decmal3:"^-?([1-9]\\d*.\\d*|0.\\d*[1-9]\\d*|0?.0+|0)$",  //浮点数
+        decmal4:"^[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*|0?.0+|0$", //非负浮点数（正浮点数 + 0）
+        decmal5:"^(-([1-9]\\d*.\\d*|0.\\d*[1-9]\\d*))|0?.0+|0$", //非正浮点数（负浮点数 + 0）
+		decmal6:"^[1-9]{1}\d*(\.\d{1,2})?|^[0]{1}.0[1-9]{1}|^[0]{1}.[1-9]{1}0|^[0]{1}.[1-9]{1}", //非负浮点数（正浮点数 >0)
+		//decmal6:"^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$", //非负浮点数（正浮点数 >0)
+		
+        email:/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i, //邮件
+        color:"^[a-fA-F0-9]{6}$",				//颜色
+        url:"^http[s]?:\\/\\/([\\w-]+\\.)+[\\w-]+([\\w-./?%&=]*)?$",	//url
+        chinese:"^[\\u4E00-\\u9FA5\\uF900-\\uFA2D]+$",					//仅中文
+        ascii:"^[\\x00-\\xFF]+$",				//仅ACSII字符
+        zipcode:"^\\d{6}$",						//邮编
+        mobile:'^(13[0-9]|15[0-9]|14[7|5]|17[0|7|8]|18[0-9])\\d{8}$',//手机
+        mobile_phone:'(^(13[0-9]|15[0-9]|14[7|5]|17[0|7|8]|18[0-9])\\d{8}$)|(^(([0\\+]\\d{2,3}(-)?)?(0\\d{2,3})(-)?)?(\\d{7,8})(-(\\d{3,}))?$)',//手机或者固话
+        ip4:"^(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)$",	//ip地址
+        notempty:function(value){
+        	if(parseInt(value) == 0) {
+        		return true;
+        	}
+            return value.length > 0;
+        },						//非空
+        picture:"(.*)\\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$",	//图片
+        rar:"(.*)\\.(rar|zip|7zip|tgz)$",								//压缩文件
+        date:"^\\d{4}(\\-|\\/|\.)\\d{1,2}\\1\\d{1,2}$",					//日期
+        qq:"^[1-9]*[1-9][0-9]*$",				//QQ号码
+        tel:"^(([0\\+]\\d{2,3}(-)?)?(0\\d{2,3})(-)?)?(\\d{7,8})(-(\\d{3,}))?$",	//电话号码的函数(包括验证国内区号,国际区号,分机号)
+        name:"^[\\u4E00-\\u9FA5\\uF900-\\uFA2Da-zA-Z]([\\s.]?[\\u4E00-\\u9FA5\\uF900-\\uFA2Da-zA-Z]+){1,}$", //真实姓名由汉字、英文字母、空格和点组成，不能以空格开头至少两个字
+        addressname:"^[\\u4E00-\\u9FA5\\uF900-\\uFA2Da-zA-Z]{1,}$",	//收货人
+        username:"^[0-9a-zA-Z_]{3,15}$",					//用来用户注册。匹配由数字、26个英文字母中文或者下划线组成的字符串 3-15个字符串之间 
+        username2:"^[0-9@_a-zA-Z\-\.\u0391-\uFFE5]{2,50}$",	//修改过，下划线放在Z后面会出错，我加了个@符号
+        letter:"^[A-Za-z]+$",					//字母
+        letter_u:"^[A-Z]+$",					//大写字母
+        letter_l:"^[a-z]+$",					//小写字母
+        idcard:"^[1-9]([0-9]{14}|[0-9]{16}[0-9xX])$",	//身份证
+        passwrd:"^[\\w-@#$%^&*]{6,20}$"         //密码保证6-20位的英文字母/数字/下划线/减号和@#$%^&*这些符号
+};
+
+
+/*
+* Cookie控制
+*/
+UtilLin.Cookie = {
+    get:function(name){
+        var cookieValue = "";
+        var search = name + "=";
+        if (document.cookie.length > 0) {
+            offset = document.cookie.indexOf(search);
+            if (offset != -1) {
+                offset += search.length;
+                end = document.cookie.indexOf(";", offset);
+                if (end == -1)
+                    end = document.cookie.length;
+                cookieValue = decodeURIComponent(document.cookie.substring(offset, end));
+            }
+        }
+        return cookieValue;
+    },
+    set:function(name, value, hours){
+        var expire = "";
+        if (hours != null) {
+            if(hours == -1 || value == ''){
+                expire = "; expires=-1";
+            }
+            else{
+                expire = new Date((new Date()).getTime() + hours * 3600000);
+                expire = "; expires=" + expire.toUTCString();
+            }
+        }
+        document.cookie = name + "=" + encodeURIComponent(value) + expire + '; path=/';
+    }
+}
+
+
+//复选框
+UtilLin.getCheck = (function () {
+	return {
+		isCheck:function (all,checks) {
+			all.on("click",function () {
+				if($(this).prop("checked") == true) {
+					checks.filter(function () {
+						return !$(this).prop("checked");
+					}).attr("checked",true);
+				}
+				else {
+					checks.filter(function () {
+						return $(this).prop("checked");
+					}).attr("checked",false);
+				}
+			});
+			checks.on("click",function () {
+				if(checks.filter(":checked").length == checks.length) {
+					!all.prop("checked")&&all.prop("checked",true);
+				}
+				else all.prop("checked")&&all.prop("checked",false);
+			})
+		},
+		diyCheck:function (all,checks,cls) {
+			all.on("click",function () {
+				if(!$(this).hasClass(cls)){
+					$(this).addClass(cls);
+					checks.filter(function () {
+						return !$(this).hasClass(cls);
+					}).addClass(cls);
+				}
+				else {
+					$(this).removeClass(cls);
+					checks.filter(function () {
+						return $(this).hasClass(cls);
+					}).removeClass(cls);
+				}
+			});
+			checks.on("click",function () {
+				$(this).toggleClass(cls);
+				if(checks.filter("."+cls).length == checks.length) {
+					!all.hasClass(cls)&&all.addClass(cls);
+				}
+				else all.hasClass(cls)&&all.removeClass(cls);
+			})
+		}
+	}
+})();
+
+UtilLin.showMenu = function(setting){
+	var sort_time, sort_show;
+	var _setting = setting;
+	_setting.title.on( _setting.bind || "mouseenter", function (){
+		var self = $(this);
+		sort_time&&clearTimeout(sort_time);
+		sort_show&&clearTimeout(sort_show);
+		sort_show = setTimeout(function () {
+			_setting.showCallbefore && _setting.showCallbefore();
+			_setting.contant.show();
+			_setting.showCallback && _setting.showCallback();
+		},200);
+
+	}).on("mouseleave", function (){
+		sort_time&&clearTimeout(sort_time);
+		sort_show&&clearTimeout(sort_show);
+		sort_time = setTimeout(function(){
+			_setting.hideCallbefore && _setting.hideCallbefore();
+			_setting.contant.hide();
+			_setting.hideCallback && _setting.hideCallback();
+		},300);
+	});
+	_setting.contant.on("mouseenter", function (){
+		sort_time&&clearTimeout(sort_time);
+		sort_show&&clearTimeout(sort_show);
+	}).on("mouseleave", function () {
+		sort_time&&clearTimeout(sort_time);
+		sort_time = setTimeout(function(){
+			_setting.hideCallbefore && _setting.hideCallbefore();
+			_setting.contant.hide();
+			_setting.hideCallback && _setting.hideCallback();
+		},300);
+	})
+}
+
+UtilLin.log = function (str) {
+	if(window.console) {
+		console.log(str);
+	}
+}
+UtilLin.boxTab = function (el, box, event) {
+	box.hide();
+	box.eq(0).show();
+	el.removeClass('focus');
+	el.eq(0).addClass('focus');
+	el.on(event || 'mouseenter', function () {
+		var self = $(this);
+		el.removeClass('focus');
+		self.addClass('focus');
+		box.hide().eq(self.index()).show();
+	})
+}
+UtilLin.uiCommon = (function (){
+	return {
+		BindSearch: function(input, label, clean){
+	        var timer;
+	        var _state = false;
+	        var checkVal = function(){
+	            if(_state) return;
+	            if(input.val() == ''){
+	                label && label.is(':hidden') && label.show();
+	                clean && !clean.is(':hidden') && clean.hide();
+	            }
+	            else{
+	                label && !label.is(':hidden') && label.hide();
+	                clean && clean.is(':hidden') &&clean.show();
+	            }
+	        }
+	        
+	        var listen = function(){
+	            if(timer) window.clearTimeout(timer);
+	            timer = window.setTimeout(function(){
+	                checkVal();
+	                listen();
+	            }, 80);
+	        }
+	        checkVal();
+	        listen();
+	        
+	        return {
+	            Disabled: function(){
+	                _state = true;
+	                label.hide();
+	            },
+	            Enabled: function(){
+	                _state = false;
+	                checkVal();
+	            }
+	        }
+	    },
+		//模板类
+		formatTpl:function (str,data) {
+			return str.replace(/{(.*?)}/igm,function (strs,key) {
+		        var keys = key.split(":"), str = data[keys[0]];
+		        if(keys.length==1) {
+		            return str ? str : "";
+		        }
+		        else {
+		            var fns = keys[1].split("."), fn = window;
+		            for(var i=0;i<fns.length;i++) {
+		                fn = fn[fns[i]];
+		            }
+		            return fn(str);
+		        }
+		    })
+		},
+		//TAB内容切换
+		boxTab:function (opt) {
+			var e = opt.event || "click";
+			opt.tab.on(e,function () {
+				opt.box.hide();
+				opt.box.eq($(this).index()).show();
+				opt.tab.removeClass(opt.cls);
+				$(this).addClass(opt.cls);
+				opt.callback&&opt.callback($(this));
+			})
+		},
+		//单验证
+		Validate:function (self,obj, callback) {
+			var t = self.attr("vali"), n=self.attr("errormsg");
+			if(obj) {
+				t = obj.vali;
+				n = obj.errormsg;
+			}
+			var vails = t.split("|"),errs = n.split("|");
+			for(var i=0;i<vails.length;i++) {
+				var reg = new RegExp(_reg[vails[i]]);
+				var blo = typeof _reg[vails[i]] == "function" ?  _reg[vails[i]](self.val()) : reg.test(self.val());
+				if(self[0].tagName.toLowerCase() == "select" && Number(self.val()) == 0 ) {
+						blo = false;
+				}
+				
+				if(callback) {
+					if(!blo) {
+						Core.MinMessage.Show({text:errs[i], type:'err', timeout:2000});
+						return false;
+					}else {
+						return true;
+					}
+				}else{
+					if(blo) {
+						UtilLin.uiCommon.valiHide(self);
+					} else{
+						UtilLin.uiCommon.valiShow(self,errs[i]);
+						return false;
+					}
+				}
+				
+			}
+			return true;
+		},
+		BindValidates:function (form) {
+			var self = this;
+			form.on('focus', ':input[vali]', function () {
+				self.valiHide($(this));
+				return false;
+			}).on('blur', ':input[vali]', function () {
+				self.Validate($(this));
+				return false;
+			})
+		},
+		//多验证
+		Validates:function (form) {
+			var t = true, self = this;
+			form.find(":input[vali]").each(function () {
+				if(!self.Validate($(this))) {
+					t = false;
+				}
+			});
+			return t;
+		},
+		//错误提示显示
+		valiShow:function (self,str) {
+			!self.nextAll(".tips_warn").length ? self.parent().append('<div class="tips_warn"><span><b class="sign-bak"></b>亲(^_^) '+str+'</b></span></div>') : self.nextAll(".tips_warn").show().find('span').html('<b class="sign-bak"></b>亲(^_^) '+str);
+		},
+		//错误提示隐藏
+		valiHide:function (self) {
+			self.nextAll(".tips_warn").hide();
+		},
+		//密码与确认密码验证
+		valipass:function (old,news,str) {
+			if(old.val() != news.val()) {
+				UtilLin.uiCommon.valiShow(old,str);
+				UtilLin.uiCommon.valiShow(news,str);
+				return false;
+			}
+			else {
+				UtilLin.uiCommon.valiHide(old);
+				UtilLin.uiCommon.valiHide(news);
+				return true;
+			}
+		},
+		//代替form 提交 提取内容
+		inputObj:function (self) {
+			var obj = {};
+			self.find(":input").each(function () {
+				var name = this.name, type = this.type;
+				if(!name.length) {
+					return false;
+				}
+				if(type=="hidden") type = "text";
+				if(type=="file") {
+					return;
+				}
+				switch(type) {
+					case "radio":      //单选框
+						if(this.checked == true) obj[name] = $(this).val();	
+						break;
+					case "checkbox":    //复选框数组
+						if(!obj[name]) {
+							obj[name] = [];
+						}
+						if(this.checked == true) obj[name].push($(this).val());
+						break;
+					case "text":
+						if(!obj[name]) {	//单输入框
+							obj[name] = $(this).val();
+						}
+						else if(obj[name] && !jQuery.isArray(obj[name])) {	//输入框数组
+							var k = obj[name];
+							obj[name] = [k];
+						}
+						jQuery.isArray(obj[name])&&obj[name].push($(this).val());
+						break;
+					default:    //其它
+						obj[name] = $(this).val();
+				}
+			});
+			return obj;
+		},
+		//lable隐藏
+		lableHide:function (arr) {
+			$("#"+arr.join(",#")).on("focus",function () {
+				$("label[for='"+this.id+"']").hide();
+			}).on("blur",function () {
+				!$(this).val().length&&$("label[for='"+this.id+"']").show();
+			})
+		},
+		//只限数字
+		isNuber:function (self, default_value) {
+			var reg = new RegExp("^[0-9]{1,20}$");
+			if(!reg.test(self.val())) {
+                if(typeof(default_value) == 'undefined') {
+                        default_value = '0';     
+                }
+                self.val(default_value);
+			}
+		}
+	}
+})();
+
+$(function () {
+	/*通用收藏，数据包代码*/
+	$(document.body).on('click', '[common_data]', function () {
+
+		if((!window['USER_LOGIN'] || USER_LOGIN < 1) ) {
+			if($('.js-login').length) {
+				$('.js-login:eq(0)').click();
+			}else {
+				Core.MinMessage.Show({text:'请先登录再进行操作',type:'war',timeout:2000})
+			}
+			return false;
+		}
+
+		var el = $(this), common_data = el.attr('common_data');
+		var active = Number(el.attr('state')), item_id = Number(el.attr('item_id'));
+		var is_detail = $(this).attr('detail');
+		var url, text;
+		switch(common_data) {
+			case "fav":
+				var obj = {
+					item_id: item_id,
+					type:1
+				};
+				 if(active == 1) {
+				 	url = '/UserWishlist/add.html';
+				 	text = is_detail ? '取消收藏' : '取消';
+				 }else {
+				 	url = '/UserWishlist/del.html';
+				 	text = is_detail ? '收藏商品' : '收藏';
+				 }
+				 $.post(url ,obj,function (r) {
+					if(r.state){
+						Core.MinMessage.Show({text:r.state_message, type:'suc', timeout:2000 });
+						el.attr('state',active == 1 ? 0 : 1);
+						el.children('span').text(text);
+					}else{
+						Core.MinMessage.Show({text:r.state_message, type:'err', timeout:2000 });
+					}
+				},'json');
+			break;
+			case "packet":
+				if(active == 1) {
+					url = '/UserPro/add.html';
+				}else {
+					url = '/UserPro/del.html';
+				}
+				$.post(url, {item_id: item_id}, function(r) {
+					if(r.state) {
+						Core.MinMessage.Show({text:r.state_message, type:'suc', timeout:2000});
+						el.attr('state', active == 1 ? 0 : 1);
+
+						if(active == 1) {
+							el.children('i').addClass('dataPackage-b');
+						}else {
+							el.children('i').removeClass('dataPackage-b');
+						}
+
+					}else {
+						Core.MinMessage.Show({text:r.state_message, type:'err', timeout:2000 });
+					}
+				}, 'json');
+			break;
+			
+		}
+		return false;
+	})
+})

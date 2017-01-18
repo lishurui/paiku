@@ -1,0 +1,112 @@
+
+
+侧边栏菜单
+/*main*/
+/*.pk_main{width:100%;min-height: 450px;}
+.pk_main_warp{width:1190px;margin: 0 auto;position: relative;}
+.pk_main_warp .pk_main_f1{width:200px;height:547px;float:left;}
+.pk_main_warp .pk_main_f1 .pk_main_fl_t1{width:200px;height:314px;border:1px solid #eee;overflow: hidden;}
+.pk_main_warp .pk_main_f1 .pk_main_fl_t2{width:200px;height:219px;border:1px solid #eee;position: absolute;top:326px;}
+.pk_main_warp .pk_main_f1 .pk_main_fl_t1 .dropdowm{width:198px;height:295px;overflow: hidden;background: #fff;}
+.pk_main_fl_t1 .dropdowm .sort_box{overflow: hidden; padding: 0 23px;border-color: #fff;z-index: 1;position: relative;}
+.pk_main_fl_t1 .dropdowm .sort_box h3{height:29px;line-height: 29px;overflow: hidden;cursor: pointer;}
+.pk_main_fl_t1 .dropdowm .sort_box h3 a{font-size:14px;font-family:"微软雅黑";font-weight: 100;}
+.pk_main_fl_t1 .dropdowm .sort_box h3 i{width:5px;height:8px;background:url(../images/llyy_icon.png) -133px -63px no-repeat;position: absolute;right:25px;top:11px;overflow: hidden;}
+.pk_main_fl_t1 .dropdowm .sort_box:hover i{background:url(../images/llyy_icon.png) -148px -63px no-repeat;}
+.pk_main_fl_t1 .dropdowm .sort_box ul{width:227px;margin-bottom: 5px;}
+.pk_main_fl_t1 .dropdowm .sort_box ul li a{display:inline-block;width:57px;height:29px;line-height:29px;float:left;}
+.pk_main_fl_t1 .dropdowm .sort_box{overflow: hidden; padding: 0 23px;border-color: #fff;z-index: 1;position: relative;}*/
+/*侧边栏隐藏的列表*/
+/*.pk_main_fl_t1 .dropdowm .dropdowm_layer{width:553px;border:1px solid #e8e8e8;background:#fff;position: absolute;z-index:2;padding: 24px 20px 0 20px;left:199px;top:0px;min-height: 290px;display: none;}
+.pk_main_fl_t1 .dropdowm .dropdowm_layer dl dt a{display:inline-block;cursor: pointer;font-size: 14px;font-weight: bold;}
+.pk_main_fl_t1 .dropdowm .dropdowm_layer dl dd{margin-left: -10px;margin-bottom: 20px;}
+.pk_main_fl_t1 .dropdowm .dropdowm_layer dl dd a{display: inline-block;margin: 30px 10px 0 10px ;}*/
+
+/*下面的侧边栏*/
+/*.pk_main_f1 .pk_main_fl_t2 .dropdowm2{height:201px;width:198px;background: #fff;}
+.pk_main_f1 .pk_main_fl_t2 .dropdowm2 .dd{width:198px;margin-top: 10px;}
+.pk_main_fl_t2 .dropdowm2 .dd .sort_box2{overflow: hidden; padding: 0 23px;background: #fff;z-index: 1;position: relative;}
+.pk_main_fl_t2 .dropdowm2 .dd .sort_box2 h3{height:29px;line-height: 29px;overflow: hidden;cursor: pointer;}
+.pk_main_fl_t2 .dropdowm2 .dd .sort_box2 h3 a{font-size:14px;font-family:"微软雅黑";font-weight: 100;}
+.pk_main_fl_t2 .dropdowm2 .dd .sort_box2 h3 i{width:5px;height:8px;background:url(../images/llyy_icon.png) -133px -63px no-repeat;position: absolute;right:25px;top:11px;overflow: hidden;}
+.pk_main_fl_t2 .dropdowm2 .dd .sort_box2:hover i{background:url(../images/llyy_icon.png) -148px -63px no-repeat;}
+.pk_main_fl_t2 .dropdowm2 .dd .sort_box2 .dd1{width:176px; height: 179px; overflow: hidden; margin-bottom: 5px;position: relative;}
+.pk_main_fl_t2 .dropdowm2 .dd .sort_box2 .dd1 li{display:inline-block;width:57px;height:31px;line-height:31px;float:left;}
+
+.pk_main_fl_t2 .dropdowm2 .dd .sort_box3{width:153px;height:100px; padding: 0 23px;background: #fff;position:absolute;left:0px;top:218px;z-index:10;border:1px solid #ddd;border-top:none;display:none;}*/
+
+/*.pk_main_fl_t2 .dropdowm2 .dd .sort_box3 .dd2{width:227px;margin-bottom: 5px;position: absolute;margin-top: 165px;background: #fff;}*/
+/*.pk_main_fl_t2 .dropdowm2 .dd .sort_box3 .dd2 li{display:inline-block;width:57px;height:31px;line-height:31px;float:left;}*/
+
+/*banner*/
+/*.pk_main_f2{width:980px;margin-left: 10px;}*/
+.pk_banner{width:100%;height:552px;}
+.pk_banner_c{width:1190px;height:552px;margin: 0 auto;}
+.pk_banner_c .banner_lt{width:198px;height:552px;float:left;margin-left: 10px;}
+.pk_banner_c .banner_rt{width:982px;height:552px;float:left;}
+.pk_banner_c .banner_lt .banner_lt_t1{width:198px;height:316px;border:1px solid #E6E6E6;position: relative;cursor: pointer;}
+.pk_banner_c .banner_lt .banner_lt_t2{width:198px;height:220px;border:1px solid #e6e6e6;margin-top: 10px;position:absolute;cursor: pointer;}
+.pk_banner_c .banner_lt .banner_lt_t1 .center{width:158px;height:80px;margin: 20px 20px 0 20px ;position: relative;}
+.pk_banner_c .banner_lt .banner_lt_t1 .center h3{font-size:14px;font-weight:100;}
+.pk_banner_c .banner_lt .banner_lt_t1 .center span{display:inline-block;width:5px;height:8px;background:url(../images/llyy_icon.png) -133px -63px no-repeat;overflow: hidden;position:absolute;top:6px;right:15px;}
+.pk_banner_c .banner_lt .banner_lt_t1 .center ul li{width:52px;float:left;padding-top: 5px;padding-bottom: 10px;}
+.pk_banner_c .banner_lt .banner_lt_t1 .center ul li a:hover{color:#72D2F1;}
+.pk_banner_c .banner_lt .banner_lt_t1 .center:hover span{background: url(../images/llyy_icon.png) -148px -63px no-repeat;}
+.pk_banner_c .banner_lt .banner_lt_t1 .center_rt1{width:593px;height:316px;background: red;position: absolute;left:199px;top:0px;display: none;z-index: 3;}
+.banner_lt_t2 .content{width:158px;height:80px;margin: 20px 20px 0 20px ;position: relative;}
+.banner_lt_t2 .content h3{font-size:14px;font-weight:100;}
+.banner_lt_t2 .content span{display:inline-block;width:5px;height:8px;background:url(../images/llyy_icon.png) -133px -63px no-repeat;overflow: hidden;position:absolute;top:6px;right:15px;}
+.banner_lt_t2 .content ul li{width:52px;float:left;padding-top: 5px;padding-bottom: 10px;}
+.banner_lt_t2 .content ul li a:hover{color:#72D2F1;}
+.banner_lt_t2 .content:hover span{background: url(../images/llyy_icon.png) -148px -63px no-repeat;}
+.banner_lt_t2 .content1{width:198px;height:70px;border:1px solid #E6E6E6;position: absolute;top:218px;left:-1px;display: none;border-top:none;z-index: 10;background: #fff;}
+.banner_lt_t2 .content1 ul{margin-left: 20px;}
+.banner_lt_t2 .content1 ul li{width:52px;float:left;padding-top: 5px;padding-bottom: 10px;}
+.banner_lt_t2 .content1 ul li a:hover{color:#72D2F1;}
+/*轮播图*/
+.banner_rt .banner_rt_t1{width:990px;height:316px;}
+.banner_rt .banner_rt_t2{width:990px;height:234px;}
+/*.banner_rt .banner_rt_t1 .rt_t1_l{width:582px;height:316px;margin-left: 10px;border:1px solid #ccc;}*/
+
+#banner1{ width:584px; height:316px; overflow:hidden; margin-left:10px; position:relative;float:left;}
+#rt_t1_l{ width:100%; height:316px; overflow:hidden; position:relative;}
+#rt_t1_l a{ display:block; width:100%; height:100%; position:absolute; top:0px; left:0px; opacity:0.3; display:none;}
+#rt_t1_l a:nth-child(1){opacity:1; display:block;}
+#rt_t1_l a img{ border:none; float:left;}
+#arrow{width:100%; height:60px; overflow:hidden; position:absolute;top:105px; left:0px;display: none;}
+#arrow:hover{cursor:pointer;}
+#arrow div{width:100%; height:100%; position:relative;}
+#arrow div span{ display:block; width:40px; height:50px; overflow:hidden; color:#fff;
+		background-color:#000; position:absolute; top:10px; line-height:50px; text-align:center;
+		font-size:20px;
+		z-index:2;}
+#arrow span.left{ left:0px;}
+#arrow span.right{ right:0px; }
+/*第二个轮播*/
+.banner2{width:188px;height:316px;overflow: hidden;margin-left: 10px;position: relative;float:left;}
+.banner2 .rt_t1_c{width:100%;height:316px;position:relative;}
+#rt_t1_c a{ display:block; width:100%; height:100%; position:absolute; top:0px; left:0px;}
+#rt_t1_c a img{ border:none; float:left;}
+#btn{width:100%;height:60px;overflow: hidden;position: absolute;top:125px;left:0px;display: none;}
+#btn:hover{cursor:pointer;}
+#btn div{width:100%; height:100%; position:relative;}
+#btn div span{ display:block; width:30px; height:50px; overflow:hidden; color:#fff;
+		background-color:#000; position:absolute; top:10px; line-height:50px; text-align:center;
+		font-size:20px;
+		z-index:2;}
+#btn span.lt{ left:0px;}
+#btn span.rt{ right:0px; }
+
+.banner_rt .banner_rt_t1 .rt_t1_r{width:177px;height:314px;border:1px solid #e6e6e6;margin-left: 10px;float:left;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_r{width:179px;height:193px;margin: 25px 0 0 20px;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_r h3{font-weight: 100;color:#6c6c6c;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_r span{display:block;width:144px;height:34px;margin: 10px 0 10px;border:1px solid #E6E6E6;text-align: center;line-height: 34px;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_r span a{display: block;color:#555;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_r #btn1:hover{opacity: 0.9;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_r #btn2 a:hover{color:#72D2F1;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_b #t1_b_x{width:179px;height:25px;position:relative;z-index: 5;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_b #t1_b_x li{width:59px;height:25px;float:left;text-align: center;line-height: 25px;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_b #t1_b_x li:hover{cursor:pointer;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_b .t1_b_k{width:177px;height:69px;border-top:1px solid #E6E6E6;position:absolute;z-index: 1;background: #fff;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_b .t1_b_k ul li{margin: 5px 0 0 15px;}
+.banner_rt .banner_rt_t1 .rt_t1_r .t1_b .t1_b_k ul li a:hover{color:#72D2F1;}
